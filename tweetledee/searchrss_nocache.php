@@ -2,7 +2,6 @@
 /***********************************************************************************************
  * Tweetledee  - Incredibly easy access to Twitter data
  *   searchrss_nocache.php -- Tweet search query results formatted as RSS feed
- *   Version: 0.5.0
  * Copyright 2014 Christopher Simpkins
  * MIT License
  ************************************************************************************************/
@@ -40,28 +39,32 @@ require 'tldlib/renderers/rss.php';
 
 require 'tldlib/parametersProcessing.php';
 
-$parameters = load_parameters(array("c", "q", "rt", "recursion_limit"));
+$parameters = load_parameters([
+    "c",
+    "q",
+    "rt",
+    "recursion_limit"
+]);
 extract($parameters);
-if(!isset($parameters['q'])) {
+if (!isset($parameters['q'])) {
     die("Error: missing the search query term.  Please use the 'q' parameter.");
 }
 
 /*******************************************************************
 *  OAuth
 ********************************************************************/
-$tmhOAuth = new tmhOAuth(array(
-            'consumer_key'        => $my_consumer_key,
-            'consumer_secret'     => $my_consumer_secret,
-            'user_token'          => $my_access_token,
-            'user_secret'         => $my_access_token_secret,
-            'curl_ssl_verifypeer' => false
-        ));
+$tmhOAuth = new tmhOAuth([
+    'consumer_key'        => $my_consumer_key,
+    'consumer_secret'     => $my_consumer_secret,
+    'user_token'          => $my_access_token,
+    'user_secret'         => $my_access_token_secret,
+    'curl_ssl_verifypeer' => false
+]);
 
 // request the user information
-$code = $tmhOAuth->user_request(array(
-			'url' => $tmhOAuth->url('1.1/account/verify_credentials')
-          )
-        );
+$code = $tmhOAuth->user_request([
+    'url' => $tmhOAuth->url('1.1/account/verify_credentials')
+]);
 
 // Display error response if do not receive 200 response code
 if ($code <> 200) {
@@ -85,7 +88,7 @@ $twitterAvatarUrl = $data['profile_image_url'];
 ********************************************************************/
 $count = 25;  //default tweet number = 25
 $result_type = 'mixed'; //default to mixed popular and realtime results
-
+$recursion_limit = 0; // as a default we don't quote tweets
 
 $parameters = load_parameters(array("c", "q", "rt"));
 extract($parameters);

@@ -2,7 +2,6 @@
 /***********************************************************************************************
  * Tweetledee  - Incredibly easy access to Twitter data
  *   favoritesrss.php -- User favorites formatted as a RSS feed
- *   Version: 0.5.0
  * Copyright 2014 Christopher Simpkins & George Dorn
  * MIT License
  ************************************************************************************************/
@@ -39,19 +38,24 @@ require 'tldlib/renderers/rss.php';
 
 require 'tldlib/parametersProcessing.php';
 
-$parameters = load_parameters(array("recursion_limit", "c", "user", "cache_interval"));
+$parameters = load_parameters([
+    "recursion_limit",
+    "c",
+    "user",
+    "cache_interval"
+]);
 extract($parameters);
 /*******************************************************************
 *  OAuth
 ********************************************************************/
 
-$tldCache = new tldCache(array(
-            'consumer_key'        => $my_consumer_key,
-            'consumer_secret'     => $my_consumer_secret,
-            'user_token'          => $my_access_token,
-            'user_secret'         => $my_access_token_secret,
-            'curl_ssl_verifypeer' => false
-        ), $cache_interval);
+$tldCache = new tldCache([
+    'consumer_key'        => $my_consumer_key,
+    'consumer_secret'     => $my_consumer_secret,
+    'user_token'          => $my_access_token,
+    'user_secret'         => $my_access_token_secret,
+    'curl_ssl_verifypeer' => false
+], $cache_interval);
 
 // request the user information
 $data = $tldCache->auth_request();
@@ -60,7 +64,7 @@ $data = $tldCache->auth_request();
 $twitterName = $data['screen_name'];
 $fullName = $data['name'];
 $twitterAvatarUrl = $data['profile_image_url'];
-if(!isset($screen_name) || $screen_name=='') {
+if (!isset($screen_name) || $screen_name == '') {
     $screen_name = $data['screen_name'];
 }
 
@@ -68,19 +72,19 @@ if(!isset($screen_name) || $screen_name=='') {
 *  Request
 ********************************************************************/
 $userFavoritesObj = $tldCache->user_request(array(
-			'url' => '1.1/favorites/list',
-			'params' => array(
-          		'include_entities' => true,
-    			'count' => $count,
-    			'screen_name' => $screen_name,
-        	)
-        ));
+    'url' => '1.1/favorites/list',
+    'params' => array(
+        'include_entities' => true,
+        'count' => $count,
+        'screen_name' => $screen_name,
+    )
+));
 
 //concatenate the URL for the atom href link
 if (defined('STDIN')) {
     $thequery = $_SERVER['PHP_SELF'];
 } else {
-    $thequery = $_SERVER['PHP_SELF'] .'?'. urlencode($_SERVER['QUERY_STRING']);
+    $thequery = $_SERVER['PHP_SELF'] . '?' . urlencode($_SERVER['QUERY_STRING']);
 }
 
 // Start the output

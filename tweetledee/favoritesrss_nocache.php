@@ -2,7 +2,6 @@
 /***********************************************************************************************
  * Tweetledee  - Incredibly easy access to Twitter data
  *   favoritesrss_nocache.php -- User favorites formatted as a RSS feed
- *   Version: 0.5.0
  * Copyright 2014 Christopher Simpkins & George Dorn
  * MIT License
  ************************************************************************************************/
@@ -73,6 +72,7 @@ $data = json_decode($tmhOAuth->response['response'], true);
 $twitterName = $data['screen_name'];
 $fullName = $data['name'];
 $twitterAvatarUrl = $data['profile_image_url'];
+
 if(!isset($screen_name) || $screen_name=='') {
     $screen_name = $data['screen_name'];
 }
