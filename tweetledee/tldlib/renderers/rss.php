@@ -21,11 +21,17 @@ class RssRenderer extends AbstractRenderer
         if (isset($currentitem['retweeted_status'])) {
             return array(
                 'avatar' => $currentitem['retweeted_status']['user']['profile_image_url'],
-                'rt' => '&nbsp;&nbsp;&nbsp;&nbsp;[<em style="font-size:smaller;">Retweeted by ' . $currentitem['user']['name'] . ' <a href=\'http://twitter.com/' . $currentitem['user']['screen_name'] . '\'>@' . $currentitem['user']['screen_name'] . '</a></em>]',
+                'rt' => '&nbsp;&nbsp;&nbsp;&nbsp;[<em style="font-size:smaller;">Retweeted by '
+                    . $currentitem['user']['name'] . ' - '
+                    . ' <a href=\'http://twitter.com/' . $currentitem['user']['screen_name'] . '\'>@' . $currentitem['user']['screen_name'] . '</a>'
+                    . ' - '
+                    . ' <a href=\'http://twitter.com/' . $currentitem['user']['screen_name'] . '/' . $currentitem['id_str'] . '\'>See RT</a>'
+                    . '</em>]',
                 'tweeter' => $currentitem['retweeted_status']['user']['screen_name'],
                 'fullname' => $currentitem['retweeted_status']['user']['name'],
                 'tweetTitle' => $currentitem['retweeted_status']['full_text'],
-                'entities' => $currentitem['retweeted_status']['entities']
+                'entities' => $currentitem['retweeted_status']['entities'],
+                'id_str' => $currentitem['retweeted_status']['id_str']
             );
         } else {
             return array(
@@ -34,7 +40,8 @@ class RssRenderer extends AbstractRenderer
                 'tweeter' => $currentitem['user']['screen_name'],
                 'fullname' => $currentitem['user']['name'],
                 'tweetTitle' => $currentitem['full_text'],
-                'entities' => $currentitem['entities']
+                'entities' => $currentitem['entities'],
+                'id_str' => $currentitem['id_str']
             );
         }
     }
